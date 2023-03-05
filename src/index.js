@@ -23,14 +23,7 @@ function onChangeHandler() {
   if (searchQuery !== '') {
     refs.countriesList.innerHTML = '';
     refs.countryInfo.innerHTML = '';
-    fetchCountries(searchQuery)
-      .then(data => markupRes(data))
-      .then(string => {
-        console.log(string);
-        if (string) {
-          refs.countriesList.insertAdjacentHTML('beforeend', string);
-        }
-      });
+    fetchCountries(searchQuery).then(data => markupRes(data));
   }
 }
 
@@ -47,9 +40,14 @@ function markupRes(countrysARR) {
     return;
   } else if (countrysARR.length <= 10 && countrysARR.length >= 2) {
     markup = countrysARR.map(item => countriesTmpl(item)).join('');
-    return markup;
+    injectMarkup('countriesList', markup);
   } else if (countrysARR.length < 2) {
     markup = countryTmpl(countrysARR);
+    injectMarkup('countryInfo', markup);
     return markup;
   }
+}
+
+function injectMarkup(element, markup) {
+  refs[element].insertAdjacentHTML('beforeend', markup);
 }
